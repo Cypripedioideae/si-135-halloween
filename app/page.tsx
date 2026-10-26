@@ -1,69 +1,106 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import AuthGuard from "./components/auth/AuthGuard";
+import { useAuth } from "./components/auth/AuthContext";
+import { signOutUser } from "./components/lib/oauth2";
+import HintGrid from "./components/dashboard/HintGrid";
+import { isAdmin as checkIsAdmin } from "./components/auth/accessControl";
 
 export default function Home() {
+  // add the isAdmin state, will implement admin page
+  const isAdmin = checkIsAdmin(user?.email);
+
+  const { user, loading } = useAuth();
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <AuthGuard requireRole="main">
+      <div className="min-h-screen bg-black text-zinc-100 selection:bg-orange-500 selection:text-white">
+        {/* Navigation bar */}
+        <header className="border-b border-zinc-800/80 bg-zinc-950/70 backdrop-blur sticky top-0 z-40">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🎃</span>
+              <span className="font-bold text-lg tracking-tight bg-linear-to-r from-orange-400 to-amber-200 bg-clip-text text-transparent">
+                Halloween Buddy Hunt
+              </span>
+            </div>
+
+            <div className="flex items-center gap-4">
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className="text-xs px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-950/30 text-purple-300 hover:bg-purple-900/50 transition font-medium"
+                >
+                  Admin Portal
+                </Link>
+              )}
+              <div className="text-sm font-medium text-zinc-300 hidden sm:inline">
+                {/* {user?.displayName || user?.email} */}
+              </div>
+              <button
+                onClick={() => signOutUser()}
+                className="text-xs text-zinc-400 hover:text-red-400 transition ml-1"
+                title="Sign out"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Main content */}
+        <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+          {/* Progress & Buddy Overview Banner */}
+          <section className="rounded-3xl p-6 sm:p-8 bg-linear-to-br from-zinc-900 via-zinc-950 to-orange-950/30 border border-orange-500/20 shadow-2xl relative overflow-hidden">
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/20 mb-3">
+                  <span>🕵️‍♂️ Secret Buddy Assignment</span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                  Who is your Secret Buddy?
+                </h1>
+                <p className="text-zinc-400 text-sm mt-1 max-w-xl">
+                  Complete daily missions to unlock hints from the mysterious
+                  ghost council. Can you deduce their identity before Halloween
+                  night?
+                </p>
+              </div>
+
+              {/* Hint Progress Indicator */}
+              {/* <div className="bg-black/50 border border-zinc-800 rounded-2xl p-4 min-w-55">
+                <div className="flex justify-between items-center text-xs font-semibold mb-2">
+                  <span className="text-zinc-400">Progress</span>
+                  <span className="text-orange-400">1 of 5 Hints</span>
+                </div>
+                <div className="w-full bg-zinc-800 h-2.5 rounded-full overflow-hidden">
+                  <div
+                    className="bg-linear-to-r from-orange-500 to-amber-400 h-full rounded-full transition-all duration-500"
+                    style={{ width: "20%" }}
+                  />
+                </div>
+                <p className="text-[11px] text-zinc-500 mt-2 text-center">
+                  4 hints remaining to be deciphered
+                </p>
+              </div> */}
+            </div>
+          </section>
+
+          {/* 5 Hints Grid */}
+          <section className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-zinc-100 flex items-center gap-2">
+                <span>Your Clues & Missions</span>
+              </h2>
+              <span className="text-xs text-zinc-500">
+                Click active mission cards to submit proof
+              </span>
+            </div>
+
+            <HintGrid />
+          </section>
+        </main>
+      </div>
+    </AuthGuard>
   );
 }
