@@ -35,10 +35,10 @@ export interface SubmissionData {
 }
 
 export interface UserProfile {
-  userId: string;
-  userEmail: string;
+  userEmail?: string;
   displayName?: string;
-  assignedBuddyId?: string;
+  assignedBuddyEmail?: string; // Can be username handle or full email
+  assignedBuddyId?: string; // backwards compatibility
   hints?: {
     [key: number]: string;
   };
@@ -90,7 +90,7 @@ export async function submitMissionProof({
     userId: user.uid,
     userName:
       user.displayName || user.email?.split("@")[0] || `Participant${user.uid}`,
-    userEmail: user.email || "",
+    userEmail: (user.email || "").toLowerCase(),
     hintIndex,
     missionTitle,
     textContent: textContent.trim(),
@@ -227,11 +227,35 @@ export async function dismissFailureNotification(submissionId: string) {
 }
 
 /**
- * Fetch a user profile (to get assignedBuddyId or hints)
+ * Extracts username handle if email is passed (e.g. "john.doe@domain.com" -> "john.doe")
  */
-export async function getUserProfile(userId: string): Promise<UserProfile | null> {
-  const docRef = doc(db, "user_profiles", userId);
-  const snap = await getDoc(docRef);
-  if (!snap.exists()) return null;
-  return snap.data() as UserProfile;
+export function getProfileHandle(identifier: string): string {
+  const clean = identifier.trim().toLowerCase();
+  return clean.includes("@") ? clean.split("@")[0] : clean;
+}
+
+/**
+ * Fetch a user profile by handle or email (falls back to exact ID if handle is not found)
+ */
+export async function getUserProfile(identifier: string): Promise<UserProfile | null> {
+  const handle = getProfileHandle(identifier);
+  
+  // Try handle first (e.g. "user1")
+  let docRef = doc(db, "user_profiles", handle);
+  let snap = await getDoc(docRef);
+  if (snap.exists()) {
+    return snap.data() as UserProfile;
+  }
+
+  // Fallback to exact raw identifier (e.g. full email or UID)
+  const rawId = identifier.trim().toLowerCase();
+  if (rawId !== handle) {
+    docRef = doc(db, "user_profiles", rawId);
+    snap = await getDoc(docRef);
+    if (snap.exists()) {
+      return snap.data() as UserProfile;
+    }
+  }
+
+  return null;
 }

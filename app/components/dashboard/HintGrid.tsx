@@ -81,16 +81,21 @@ export default function HintGrid() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [failureNotifs, setFailureNotifs] = useState<FailureNotification[]>([]);
 
-  // 1. Fetch user's profile and buddy hints from user_profiles collection
+  // 1. Fetch user's profile and buddy hints from user_profiles collection using userEmail (or uid)
   useEffect(() => {
     if (!user) return;
 
     let isMounted = true;
     async function loadBuddyProfile() {
       try {
-        const myProfile = await getUserProfile(user!.uid);
-        if (myProfile?.assignedBuddyId) {
-          const buddyProfile = await getUserProfile(myProfile.assignedBuddyId);
+        const identifier = user!.email ? user!.email.toLowerCase() : user!.uid;
+        const myProfile = await getUserProfile(identifier);
+
+        // Find buddy email (or legacy buddy id)
+        const buddyKey =
+          myProfile?.assignedBuddyEmail || myProfile?.assignedBuddyId;
+        if (buddyKey) {
+          const buddyProfile = await getUserProfile(buddyKey);
           if (isMounted && buddyProfile?.hints) {
             setBuddyHints(buddyProfile.hints);
           }
@@ -131,16 +136,19 @@ export default function HintGrid() {
   }, [user]);
 
   // 3. Compute dynamic hints status based on submissions & buddyHints
-  const hints: Hint[] = BASE_MISSIONS.map((baseHint, index) => {
+  const hints: Hint[] = BASE_MISSIONS.map((baseHint) => {
     const hintNum = baseHint.id;
-    const clueText = buddyHints[hintNum] || `Hint ${hintNum} will be revealed once approved.`;
+    const clueText =
+      buddyHints[hintNum] || `Hint ${hintNum} will be revealed once approved.`;
 
     // Hint 1 is always unlocked initially
     if (hintNum === 1) {
       return {
         ...baseHint,
         status: "unlocked",
-        hintText: buddyHints[1] || "Waiting for your secret buddy's clues to be assigned.",
+        hintText:
+          buddyHints[1] ||
+          "Waiting for your secret buddy's clues to be assigned.",
       };
     }
 
