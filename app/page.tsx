@@ -9,9 +9,8 @@ import { isAdmin as checkIsAdmin } from "./components/auth/accessControl";
 
 export default function Home() {
   // add the isAdmin state, will implement admin page
-  const isAdmin = checkIsAdmin(user?.email);
-
   const { user, loading } = useAuth();
+  const isAdmin = checkIsAdmin(user?.email);
   return (
     <AuthGuard requireRole="main">
       <div className="min-h-screen bg-black text-zinc-100 selection:bg-orange-500 selection:text-white">
