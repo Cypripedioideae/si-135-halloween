@@ -1,12 +1,12 @@
 export const ALLOWED_PLAYER_EMAILS: string[] = (
-  process.env.NEXT_PUBLIC_ALLOWED_PLAYER_EMAILS || ""
+  process.env.ALLOWED_PLAYER_EMAILS || ""
 )
   .split(",")
   .map((email) => email.trim().toLowerCase())
   .filter(Boolean);
 
 export const ALLOWED_ADMIN_EMAILS: string[] = (
-  process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAILS || ""
+  process.env.ALLOWED_ADMIN_EMAILS || ""
 )
   .split(",")
   .map((email) => email.trim().toLowerCase())
