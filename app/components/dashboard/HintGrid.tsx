@@ -141,7 +141,7 @@ export default function HintGrid() {
     const clueText =
       buddyHints[hintNum] || `Hint ${hintNum} will be revealed once approved.`;
 
-    // Hint 1 is always unlocked initially
+    // Hint 1 is always unlocked initially (it's the initial clue provided without a mission)
     if (hintNum === 1) {
       return {
         ...baseHint,
@@ -152,29 +152,23 @@ export default function HintGrid() {
       };
     }
 
-    // Find all submissions for this hint, sorted newest first
+    // Find all submissions for this hint
     const missionSubs = userSubmissions.filter((s) => s.hintIndex === hintNum);
     const hasApproved = missionSubs.some((s) => s.status === "approved");
     const hasPending = missionSubs.some((s) => s.status === "pending");
 
-    // Check if the previous hint is unlocked (approved or hint 1)
-    const prevHintNum = hintNum - 1;
-    const isPrevUnlocked =
-      prevHintNum === 1 ||
-      userSubmissions.some(
-        (s) => s.hintIndex === prevHintNum && s.status === "approved",
-      );
-
-    let status: "unlocked" | "active" | "pending" | "locked" = "locked";
+    // All missions 2-5 are accessible right away in any order:
+    // - approved -> unlocked (clue revealed)
+    // - pending review -> pending
+    // - otherwise -> active ("READY" to be submitted at any time)
+    let status: "unlocked" | "active" | "pending" | "locked" = "active";
 
     if (hasApproved) {
       status = "unlocked";
     } else if (hasPending) {
       status = "pending";
-    } else if (isPrevUnlocked) {
-      status = "active";
     } else {
-      status = "locked";
+      status = "active";
     }
 
     return {
