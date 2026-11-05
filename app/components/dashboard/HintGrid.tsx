@@ -33,8 +33,8 @@ const BASE_MISSIONS: Omit<Hint, "status" | "hintText">[] = [
   },
   {
     id: 2,
-    title: "Mission 2",
-    missionTitle: "🩸 Bloody Mary 🩸",
+    title: "Mission 1",
+    missionTitle: "Bloody Mary 🩸",
     missionPoem:
       "I'm thirsty, darling, can't you see?\nI need some blood, bring it to me.\nFind something red, that's your quest.\nSend me its pictures, and I'll do the rest.",
     missionDescription:
@@ -43,8 +43,8 @@ const BASE_MISSIONS: Omit<Hint, "status" | "hintText">[] = [
   },
   {
     id: 3,
-    title: "Mission 3",
-    missionTitle: "👶 Ghost Child 👶",
+    title: "Mission 2",
+    missionTitle: "Ghost Child 👶",
     missionPoem:
       "I'm all alone, won't you come play?\nI've been waiting here all day.\nFind a friend and bring them too.\nPlay with me, and I'll give you the clue.",
     missionDescription:
@@ -53,8 +53,8 @@ const BASE_MISSIONS: Omit<Hint, "status" | "hintText">[] = [
   },
   {
     id: 4,
-    title: "Mission 4",
-    missionTitle: "👻 Casper the Ghost 👻",
+    title: "Mission 3",
+    missionTitle: "Casper the Ghost 👻",
     missionPoem:
       "I'm Casper the ghost, so friendly and sweet.\nTell me your favorite ghost, and our deal is complete!\n Share the one you love the most with me,\nand I'll reveal a secret for you to see!",
     missionDescription:
@@ -63,12 +63,21 @@ const BASE_MISSIONS: Omit<Hint, "status" | "hintText">[] = [
   },
   {
     id: 5,
-    title: "Final Reveal",
-    missionTitle: "🧟 Frankenstein 🧟",
+    title: "Mission 4",
+    missionTitle: "Frankenstein 🧟",
     missionPoem:
       "I've tried and failed through experiments galore.\nCreating new things and always wanting more.\nBut tell me, my friends, which event did you love the best.\nShare your favorites, and I'll reveal the clue to put you to the test!",
     missionDescription:
       "Name one (or more) SISC event you've enjoyed the most and write any messages or suggestions to SISC.",
+    imageCap: 0,
+  },
+  {
+    id: 6,
+    title: "Mission 5 ",
+    missionTitle: "The Mummy 🪦",
+    missionPoem:
+      "I've slept in my coffin for ages untold,\nNow I'm awake in a world so bold!\nHow has the world changed while I was away?\nPut these events in the right order, and I'll reveal a clue today!",
+    missionDescription: "Arrange the following events in chronological order.",
     imageCap: 0,
   },
 ];
