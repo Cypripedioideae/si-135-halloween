@@ -77,7 +77,8 @@ const BASE_MISSIONS: Omit<Hint, "status" | "hintText">[] = [
     missionTitle: "The Mummy 🪦",
     missionPoem:
       "I've slept in my coffin for ages untold,\nNow I'm awake in a world so bold!\nHow has the world changed while I was away?\nPut these events in the right order, and I'll reveal a clue today!",
-    missionDescription: "Arrange the following events in chronological order.",
+    missionDescription:
+      "Arrange the following events in chronological order:\n1. Hail night 2026 (by SI136)\n2. ประเพณีงานรับน้องข้ามฟากของรุ่น SI135\n3. การสอบวิชา SIID 259 (APK) ของรุ่น SI135\n4. งานรับกาวน์ของรุ่น SI134\n5. งาน 1st drink @ Fu Bar\n6. งานธงมหิดล 2569",
     imageCap: 0,
   },
 ];

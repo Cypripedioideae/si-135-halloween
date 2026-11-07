@@ -49,7 +49,9 @@ export default function MissionModal({
       setSelectedFiles((prev) => {
         const combined = [...prev, ...incomingFiles];
         if (combined.length > imageCap) {
-          alert(`You can only upload up to ${imageCap} images for this mission.`);
+          alert(
+            `You can only upload up to ${imageCap} images for this mission.`,
+          );
           return combined.slice(0, imageCap);
         }
         return combined;
@@ -114,7 +116,8 @@ export default function MissionModal({
   };
 
   // Determine submit disabled condition
-  const hasContent = submissionText.trim().length > 0 || selectedFiles.length > 0;
+  const hasContent =
+    submissionText.trim().length > 0 || selectedFiles.length > 0;
   const isSubmitDisabled = loading || !user || uploading || !hasContent;
 
   return (
@@ -150,7 +153,7 @@ export default function MissionModal({
             <h4 className="text-sm font-semibold text-orange-300 mb-1">
               📜 Your Task:
             </h4>
-            <p className="text-sm text-zinc-200 leading-relaxed">
+            <p className="text-sm text-zinc-200 leading-relaxed whitespace-pre-line">
               {hint.missionDescription || "Mission Description Missing"}
             </p>
           </div>
@@ -205,7 +208,10 @@ export default function MissionModal({
                         className="hidden"
                         onChange={handleFileChange}
                       />
-                      <label htmlFor="file-upload" className="cursor-pointer block">
+                      <label
+                        htmlFor="file-upload"
+                        className="cursor-pointer block"
+                      >
                         <span className="text-3xl block mb-2">📸</span>
                         <p className="text-sm font-medium text-zinc-200">
                           {selectedFiles.length === 0
