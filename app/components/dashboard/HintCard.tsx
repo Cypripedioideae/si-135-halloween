@@ -114,12 +114,9 @@ export default function HintCard({ hint, onOpenMission }: HintCardProps) {
           </button>
         )}
         {isUnlocked && (
-          <button
-            onClick={() => onOpenMission(hint)}
-            className="w-full py-2 px-4 rounded-xl font-medium text-xs bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-white transition cursor-pointer"
-          >
-            Review Mission
-          </button>
+          <div className="w-full py-2 px-4 rounded-xl font-medium text-xs bg-emerald-950/20 border border-emerald-500/30 text-emerald-400 text-center select-none">
+            ✓ Mission Completed
+          </div>
         )}
         {isLocked && (
           <div className="w-full py-2.5 px-4 rounded-xl font-semibold text-sm bg-zinc-900 border border-zinc-800 text-zinc-600 text-center cursor-not-allowed">

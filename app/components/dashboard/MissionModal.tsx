@@ -36,6 +36,7 @@ export default function MissionModal({
   const imageCap = hint.imageCap !== undefined ? hint.imageCap : 1;
   const isImageUploadAllowed = imageCap > 0;
   const isPending = hint.status === "pending";
+  const isUnlocked = hint.status === "unlocked";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -71,7 +72,7 @@ export default function MissionModal({
       alert("Please log in first.");
       return;
     }
-    if (!hint) return;
+    if (!hint || isUnlocked) return;
 
     // Check if at least text or image is provided
     if (selectedFiles.length === 0 && !submissionText.trim()) {
@@ -118,7 +119,8 @@ export default function MissionModal({
   // Determine submit disabled condition
   const hasContent =
     submissionText.trim().length > 0 || selectedFiles.length > 0;
-  const isSubmitDisabled = loading || !user || uploading || !hasContent;
+  const isSubmitDisabled =
+    loading || !user || uploading || !hasContent || isUnlocked;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
